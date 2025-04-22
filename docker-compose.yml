@@ -21,8 +21,8 @@ services:
       - JWT_SECRET=your-secret-key-change-this-in-production
       - PORT=5000
       - EMAIL_SERVICE=gmail
-      - EMAIL_USER=your-email@gmail.com
-      - EMAIL_PASSWORD=your-app-password
+      - EMAIL_USER=ysohail357@gmail.com
+      - EMAIL_PASSWORD=gxln eqvl perk ctqv
       - FRONTEND_URL=http://localhost:3000
     depends_on:
       - mongodb
