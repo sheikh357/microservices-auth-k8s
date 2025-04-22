@@ -3,16 +3,10 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const crypto = require('crypto');
 const nodemailer = require('nodemailer');
-const crypto = require('crypto');
-const nodemailer = require('nodemailer');
 
 // Environment variables
 const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key-change-this-in-production';
 const JWT_EXPIRATION = '24h';
-const EMAIL_SERVICE = process.env.EMAIL_SERVICE || 'gmail';
-const EMAIL_USER = process.env.EMAIL_USER;
-const EMAIL_PASSWORD = process.env.EMAIL_PASSWORD;
-const FRONTEND_URL = process.env.FRONTEND_URL || 'http://localhost:3000';
 const EMAIL_SERVICE = process.env.EMAIL_SERVICE || 'gmail';
 const EMAIL_USER = process.env.EMAIL_USER;
 const EMAIL_PASSWORD = process.env.EMAIL_PASSWORD;
@@ -155,27 +149,6 @@ exports.resetPassword = async (req, res) => {
   try {
     const { token, newPassword } = req.body;
     
-    // Find user by token and check if token is expired
-    const user = await User.findOne({
-      resetPasswordToken: token,
-      resetPasswordExpires: { $gt: Date.now() }
-    });
-    
-    if (!user) {
-      return res.status(400).json({ error: 'Password reset token is invalid or has expired' });
-    }
-    
-    // Hash new password
-    const salt = await bcrypt.genSalt(10);
-    user.password = await bcrypt.hash(newPassword, salt);
-    
-    // Clear reset token fields
-    user.resetPasswordToken = undefined;
-    user.resetPasswordExpires = undefined;
-    
-    await user.save();
-    
-    res.json({ message: 'Password has been reset successfully' });
     // Find user by token and check if token is expired
     const user = await User.findOne({
       resetPasswordToken: token,

@@ -1,3 +1,5 @@
+const crypto = require('crypto');
+const nodemailer = require('nodemailer');
 const mongoose = require('mongoose');
 
 const userSchema = new mongoose.Schema({
