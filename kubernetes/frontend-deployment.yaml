@@ -20,4 +20,11 @@ spec:
         - containerPort: 80
         env:
         - name: REACT_APP_API_URL
-          value: /api  # Will be handled by Nginx ingress or service proxy
+          value: /api  # Use /api if you have an ingress/proxy, or "http://backend:5000/api" if not
+        resources:
+          requests:
+            memory: "64Mi"
+            cpu: "100m"
+          limits:
+            memory: "256Mi"
+            cpu: "250m"

@@ -8,4 +8,4 @@ spec:
   ports:
   - port: 27017
     targetPort: 27017
-  type: ClusterIP  # Internal service not exposed to external network
+  clusterIP: None  # Headless service for StatefulSet/replica set

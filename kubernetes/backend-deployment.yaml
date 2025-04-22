@@ -20,7 +20,10 @@ spec:
         - containerPort: 5000
         env:
         - name: MONGO_URI
-          value: mongodb://$(MONGO_ROOT_USERNAME):$(MONGO_ROOT_PASSWORD)@mongodb:27017/login_app?authSource=admin
+          valueFrom:
+            secretKeyRef:
+              name: mongodb-secrets
+              key: mongo-uri
         - name: JWT_SECRET
           valueFrom:
             secretKeyRef:
@@ -28,13 +31,24 @@ spec:
               key: jwt-secret
         - name: PORT
           value: "5000"
-        - name: MONGO_ROOT_USERNAME
+        - name: EMAIL_SERVICE
+          value: "gmail"
+        - name: EMAIL_USER
           valueFrom:
             secretKeyRef:
               name: mongodb-secrets
-              key: mongo-root-username
-        - name: MONGO_ROOT_PASSWORD
+              key: email-user
+        - name: EMAIL_PASSWORD
           valueFrom:
             secretKeyRef:
               name: mongodb-secrets
-              key: mongo-root-password
+              key: email-password
+        - name: FRONTEND_URL
+          value: "http://localhost:3000"
+        resources:
+          requests:
+            memory: "128Mi"
+            cpu: "250m"
+          limits:
+            memory: "512Mi"
+            cpu: "500m"

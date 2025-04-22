@@ -8,4 +8,5 @@ spec:
   ports:
   - port: 80
     targetPort: 80
-  type: NodePort  # Expose to external traffic
+    nodePort: 30080  # Fixed external port for easy access
+  type: NodePort
