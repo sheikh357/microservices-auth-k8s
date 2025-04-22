@@ -107,23 +107,13 @@ exports.forgotPassword = async (req, res) => {
       return res.status(404).json({ error: 'User not found' });
     }
     
-    // Check if email configuration is available
-    if (!EMAIL_USER || !EMAIL_PASSWORD) {
-      console.warn('Email credentials not configured. Simulating email sending.');
-      return res.json({ 
-        message: 'Password reset link sent to your email (simulated)',
-        note: 'Email sending is not configured. In a real application, an email would be sent.' 
-      });
-    }
-    
     // Generate reset token
     const resetToken = crypto.randomBytes(20).toString('hex');
-    
     // Save token to user model with expiration
     user.resetPasswordToken = resetToken;
     user.resetPasswordExpires = Date.now() + 3600000; // 1 hour
     await user.save();
-    
+
     // Create email transporter using environment variables
     const transporter = nodemailer.createTransport({
       service: EMAIL_SERVICE,
@@ -132,28 +122,21 @@ exports.forgotPassword = async (req, res) => {
         pass: EMAIL_PASSWORD
       }
     });
-    
+
     // Frontend URL for reset
     const resetUrl = `${FRONTEND_URL}/reset-password/${resetToken}`;
-    
+
     // Define email options
     const mailOptions = {
       from: `"Your App" <${EMAIL_USER}>`,
       to: email,
       subject: 'Password Reset',
-      text: `You requested a password reset for your account.
-      
-Please click on the following link, or paste it into your browser to complete the process:
-${resetUrl}
-
-This link will expire in 1 hour.
-
-If you did not request this, please ignore this email and your password will remain unchanged.`
+      text: `You requested a password reset for your account.\n\nPlease click on the following link, or paste it into your browser to complete the process:\n${resetUrl}\n\nThis link will expire in 1 hour.\n\nIf you did not request this, please ignore this email and your password will remain unchanged.`
     };
-    
+
     // Send email
     await transporter.sendMail(mailOptions);
-    
+
     res.json({ message: 'Password reset link sent to your email' });
   } catch (error) {
     console.error('Forgot password error:', error);
